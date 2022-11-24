@@ -102,6 +102,16 @@ with this file. If not, see
           />
 
           <v-text-field
+            v-model="apiKey"
+            autocomplete="off"
+            placeholder="Api Key"
+            label="Api Key"
+            :append-icon="showApiKey ? 'visibility' : 'visibility_off'"
+            :type="showApiKey ? 'text' : 'password'"
+            @click:append="showApiKey = !showApiKey"
+          />
+
+          <v-text-field
             v-model="pullInterval"
             placeholder="Interval between each data pull"
             type="number"
@@ -149,7 +159,9 @@ export default {
       selectedSpatialContext: null,
       apiLogin: "",
       apiPassword: "",
+      apiKey:"",
       showApiPassword: false,
+      showApiKey : false,
       pullInterval: 5 * 60 * 1000, // 5 min
       lastSync: NaN,
       organsCfg: [],
@@ -177,6 +189,7 @@ export default {
       const node = await spinal.spinalSystem.loadModelPtr(selectedFile);
       this.apiLogin = node.client.apiLogin.get();
       this.apiPassword = node.client.apiPassword.get();
+      this.apiKey = node.client.apiKey.get();
       this.pullInterval = node.client.pullInterval.get();
       this.lastSync = node.client.lastSync.get();
       this.selectedSpatialContext = node.spatialContextID.get();
@@ -252,6 +265,7 @@ export default {
       organCfgModel.spatialContextID.set(this.selectedSpatialContext);
       organCfgModel.client.apiLogin.set(this.apiLogin);
       organCfgModel.client.apiPassword.set(this.apiPassword);
+      organCfgModel.client.apiKey.set(this.apiKey);
       organCfgModel.client.pullInterval.set(this.pullInterval);
       organCfgModel.client.lastSync.set(this.lastSync);
       organCfgModel.restart.set(true);
